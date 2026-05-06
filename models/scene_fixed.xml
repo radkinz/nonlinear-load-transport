@@ -1,0 +1,62 @@
+<mujoco model="mobile_base_shelf_payload">
+      <compiler angle="degree" coordinate="local" />
+      <option timestep="0.002" gravity="0 0 -9.81" />
+
+      <worldbody>
+            <!-- Mobile robot base -->
+            <body name="mobile_base" pos="0 0 0.15">
+                  <joint name="base_x" type="slide" axis="1 0 0" damping="2" />
+                  <joint name="base_y" type="slide" axis="0 1 0" damping="2" />
+                  <joint name="base_yaw" type="hinge" axis="0 0 1" damping="1" />
+
+                  <geom name="base_body" type="box" size="0.55 0.35 0.12"
+                        rgba="0.05 0.20 0.55 1" mass="8.0" />
+
+                  <!-- Wheels / visual only -->
+                  <geom name="wheel_fl" type="cylinder" pos="0.35 0.38 -0.03"
+                        size="0.08 0.04" euler="90 0 0" rgba="0.02 0.02 0.02 1" />
+                  <geom name="wheel_fr" type="cylinder" pos="0.35 -0.38 -0.03"
+                        size="0.08 0.04" euler="90 0 0" rgba="0.02 0.02 0.02 1" />
+                  <geom name="wheel_rl" type="cylinder" pos="-0.35 0.38 -0.03"
+                        size="0.08 0.04" euler="90 0 0" rgba="0.02 0.02 0.02 1" />
+                  <geom name="wheel_rr" type="cylinder" pos="-0.35 -0.38 -0.03"
+                        size="0.08 0.04" euler="90 0 0" rgba="0.02 0.02 0.02 1" />
+
+                  <!-- Shelf supports -->
+                  <geom name="post_fl" type="box" pos="0.42 0.28 0.35"
+                        size="0.025 0.025 0.25" rgba="0.15 0.15 0.15 1" />
+                  <geom name="post_fr" type="box" pos="0.42 -0.28 0.35"
+                        size="0.025 0.025 0.25" rgba="0.15 0.15 0.15 1" />
+                  <geom name="post_rl" type="box" pos="-0.42 0.28 0.35"
+                        size="0.025 0.025 0.25" rgba="0.15 0.15 0.15 1" />
+                  <geom name="post_rr" type="box" pos="-0.42 -0.28 0.35"
+                        size="0.025 0.025 0.25" rgba="0.15 0.15 0.15 1" />
+
+                  <!-- Shelf platform -->
+                  <geom name="shelf_platform" type="box" pos="0 0 0.60"
+                        size="0.48 0.32 0.035" rgba="0.55 0.55 0.50 1" mass="3.0" />
+
+                  <!-- Small lip so object can slide but not instantly fall off -->
+                  <geom name="shelf_lip_front" type="box" pos="0.50 0 0.66"
+                        size="0.025 0.34 0.04" rgba="0.2 0.2 0.2 1" />
+                  <geom name="shelf_lip_back" type="box" pos="-0.50 0 0.66"
+                        size="0.025 0.34 0.04" rgba="0.2 0.2 0.2 1" />
+                  <geom name="shelf_lip_left" type="box" pos="0 0.34 0.66"
+                        size="0.48 0.025 0.04" rgba="0.2 0.2 0.2 1" />
+                  <geom name="shelf_lip_right" type="box" pos="0 -0.34 0.66"
+                        size="0.48 0.025 0.04" rgba="0.2 0.2 0.2 1" />
+
+                  <!-- Loose object sitting on the shelf -->
+                  <body name="payload" pos="0.12 0.05 0.705">
+                        <geom name="payload_geom" type="box" size="0.13 0.1 0.07"
+                        mass="20.0" rgba="0.9 0.15 0.05 1" />
+                  </body>
+            </body>
+      </worldbody>
+
+      <actuator>
+            <motor name="drive_x" joint="base_x" gear="1" ctrlrange="-150 150" />
+            <motor name="drive_y" joint="base_y" gear="1" ctrlrange="-150 150" />
+            <motor name="drive_yaw" joint="base_yaw" gear="1" ctrlrange="-60 60" />
+      </actuator>
+</mujoco>
