@@ -25,8 +25,8 @@ CONFIG = {
     "slide_range_min": -0.15,
     "slide_range_max": 0.15,
 
-    "payload_damping": 25.0,
-    "payload_stiffness": 120.0,
+    "payload_damping": 5.0,
+    "payload_stiffness": 30.0,
 
     # -------------------------
     # Contact friction

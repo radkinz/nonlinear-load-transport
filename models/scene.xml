@@ -54,8 +54,8 @@
                               axis="1 0 0"
                               limited="true"
                               range="-0.15 0.15"
-                              damping="25.0"
-                              stiffness="120.0" />
+                              damping="5.0"
+                              stiffness="30.0" />
 
                         <geom name="payload_geom"
                               type="box"
