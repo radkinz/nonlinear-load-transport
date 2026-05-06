@@ -2,7 +2,7 @@
     <compiler angle="degree" coordinate="local"/>
     <option timestep="0.002" gravity="0 0 -9.81"/>
 
-    <include file="mobile_base_payload_free.xml"/>
+    <include file="mobile_base_payload_fixed.xml"/>
 
     <asset>
         <texture name="grid" type="2d" builtin="checker"
