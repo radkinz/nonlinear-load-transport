@@ -11,6 +11,7 @@ sys.path.insert(0, str(ROOT))
 from controllers.baseline_pd import BaselinePDController, wrap_angle
 from controllers.payload_aware_pd import PayloadAwarePDController
 from controllers.sliding_mode import SlidingModeController
+from controllers.adaptive_pd import AdaptivePDController
 from trajectories.aggressive_braking import AggressiveBrakingTrajectory
 
 
@@ -34,6 +35,18 @@ CONTROLLERS = [
     {
         "name": "sliding_mode",
         "controller": SlidingModeController(),
+        "requires_model": False,
+    },
+    {
+        "name": "adaptive_pd",
+        "controller": AdaptivePDController(
+            kp_pos=35.0,
+            kd_pos=30.0,
+            lambda_pos=2.0,
+            gamma=5.0,
+            sigma=3.0,
+            max_disturbance_estimate=30.0,
+        ),
         "requires_model": False,
     },
 ]
@@ -71,6 +84,11 @@ def compute_control(controller_entry, model, data, desired):
 
 def run_single_controller(controller_entry):
     controller_name = controller_entry["name"]
+    controller = controller_entry["controller"]
+
+    if hasattr(controller, "reset"):
+        controller.reset()
+
     log_path = LOG_DIR / f"{controller_name}.csv"
 
     model = mujoco.MjModel.from_xml_path(str(MODEL_PATH))
@@ -142,6 +160,9 @@ def run_single_controller(controller_entry):
         ctrl_x_saturated = abs(ctrl_x) >= 119.0
         ctrl_y_saturated = abs(ctrl_y) >= 119.0
 
+        d_hat_x = getattr(controller, "d_hat_x", 0.0)
+        d_hat_y = getattr(controller, "d_hat_y", 0.0)
+
         rows.append({
             "controller": controller_name,
             "time": t,
@@ -193,6 +214,9 @@ def run_single_controller(controller_entry):
 
             "ctrl_x_saturated": ctrl_x_saturated,
             "ctrl_y_saturated": ctrl_y_saturated,
+
+            "d_hat_x": d_hat_x,
+            "d_hat_y": d_hat_y,
         })
 
     with open(log_path, "w", newline="") as f:

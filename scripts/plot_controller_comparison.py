@@ -17,11 +17,33 @@ CSV_FILES = {
     "Baseline PD": LOG_DIR / "baseline_pd.csv",
     "Payload-Aware PD": LOG_DIR / "payload_aware_pd.csv",
     "Sliding Mode": LOG_DIR / "sliding_mode.csv",
+    "Adaptive PD": LOG_DIR / "adaptive_pd.csv",
 }
 
 BRAKE_START = 0.0
 BRAKE_END = 2.0
 
+def plot_adaptive_disturbance_estimate(data):
+    if "Adaptive PD" not in data:
+        return
+
+    df = data["Adaptive PD"]
+
+    plt.figure(figsize=(8, 5))
+
+    plt.plot(
+        df["time"],
+        df["d_hat_x"],
+        label="Adaptive disturbance estimate",
+        linewidth=2,
+    )
+
+    add_braking_region()
+
+    plt.xlabel("Time [s]")
+    plt.ylabel("Estimated Disturbance")
+    plt.title("Adaptive PD Disturbance Estimate")
+    save_plot("adaptive_disturbance_estimate.png")
 
 def load_logs():
     data = {}
@@ -278,6 +300,7 @@ def main():
     plot_control_effort(data)
     plot_ctrl_x(data)
     plot_summary_bar_metrics(data)
+    plot_adaptive_disturbance_estimate(data)
 
     print(f"Saved controller comparison plots to: {PLOT_DIR}")
 

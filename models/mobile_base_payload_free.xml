@@ -10,7 +10,7 @@
                   <joint name="base_yaw" type="hinge" axis="0 0 1" damping="1" />
 
                   <geom name="base_body" type="box" size="0.55 0.35 0.12"
-                        rgba="0.05 0.20 0.55 1" mass="8" />
+                        rgba="0.05 0.20 0.55 1" mass="{base_mass}" />
 
                   <!-- Wheels / visual only -->
                   <geom name="wheel_fl" type="cylinder" pos="0.35 0.38 -0.03"
@@ -34,7 +34,7 @@
 
                   <!-- Shelf platform -->
                   <geom name="shelf_platform" type="box" pos="0 0 0.60"
-                        size="0.48 0.32 0.035" rgba="0.55 0.55 0.50 1" mass="3" />
+                        size="0.48 0.32 0.035" rgba="0.55 0.55 0.50 1" mass="{shelf_mass}" />
 
                   <!-- Small lip so object can slide but not instantly fall off -->
                   <geom name="shelf_lip_front" type="box" pos="0.50 0 0.66"
@@ -46,14 +46,23 @@
                   <geom name="shelf_lip_right" type="box" pos="0 -0.34 0.66"
                         size="0.48 0.025 0.04" rgba="0.2 0.2 0.2 1" />
 
-                 <!-- Sliding internal payload on the shelf -->
-                  <body name="payload" pos="0.12 0.05 0.705">
-                        <joint name="payload_slide_x" type="slide" axis="1 0 0"
-                              limited="true" range="-0.15 0.15"
-                              damping="25" stiffness="120" />
-                        <geom name="payload_geom" type="box" size="0.13 0.10 0.07"
-                              mass="20.0" rgba="0.9 0.15 0.05 1"
-                              friction="2.0 0.1 0.01" />
+                  <!-- Sliding internal payload on the shelf -->
+                  <body name="payload" pos="{payload_pos_x} {payload_pos_y} {payload_pos_z}">
+
+                        <joint name="payload_slide_x"
+                              type="slide"
+                              axis="1 0 0"
+                              limited="true"
+                              range="{slide_range_min} {slide_range_max}"
+                              damping="{payload_damping}"
+                              stiffness="{payload_stiffness}" />
+
+                        <geom name="payload_geom"
+                              type="box"
+                              size="{payload_size_x} {payload_size_y} {payload_size_z}"
+                              mass="{payload_mass}"
+                              rgba="0.9 0.15 0.05 1"
+                              friction="{friction_slide} {friction_torsion} {friction_roll}" />
                   </body>
             </body>
       </worldbody>
